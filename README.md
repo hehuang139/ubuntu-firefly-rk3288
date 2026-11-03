@@ -58,7 +58,7 @@ cd ubuntu-firefly-rk3288
 
 实际[包版本清单](release-records/20261103/packages.tsv)、[对应源码包清单](release-records/20261103/source-packages.tsv)和[完整验证记录](release-records/20261103/validation/README.md)保存在 `release-records/20261103/`。APT 仓库和 Docker 基础镜像会更新，重建时以新生成的包清单和镜像 manifest 记录实际版本。
 
-当前硬件验收入口是**原版板的 TF 卡 + HDMI 冷启动**：完成 GNOME 首次建号，再记录桌面显示、USB 键鼠、有线网络、HDMI 声音及 `glxinfo -B` 的 renderer。板上 Wi-Fi、蓝牙及其他接口按实际结果继续补充记录。
+当前为等待首次刷卡验证的 alpha 版本，已完成上述构建与镜像检查。下一步是**原版板的 TF 卡 + HDMI 冷启动**：完成 GNOME 首次建号，再记录桌面显示、USB 键鼠、有线网络、HDMI 声音及 `glxinfo -B` 的 renderer。板上 Wi-Fi、蓝牙及其他接口按实际结果继续补充记录。
 
 ## 文档与许可
 
