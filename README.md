@@ -11,6 +11,7 @@
 - [Ubuntu GNOME 镜像 `.img.gz`](https://github.com/hehuang139/ubuntu-firefly-rk3288/releases/download/v0.1.0-alpha/ubuntu-22.04.5-gnome-firefly-rk3288-sd-20261103-alpha.img.gz)
 - [SHA256SUMS](https://github.com/hehuang139/ubuntu-firefly-rk3288/releases/download/v0.1.0-alpha/SHA256SUMS)
 - [配套源码材料](https://github.com/hehuang139/ubuntu-firefly-rk3288/releases/download/v0.1.0-alpha/firefly-rk3288-ubuntu22.04-gnome-sources.tar.gz)
+- [Ubuntu 软件包对应源码与校验方法](docs/CORRESPONDING-SOURCES.md)
 
 准备至少 **16 GB TF 卡**、读卡器、HDMI 显示器和 USB 键鼠，建议接网线并安装散热片。未压缩镜像为 8 GiB，首次启动会把根分区扩展到卡上可用空间。
 
@@ -66,5 +67,6 @@ cd ubuntu-firefly-rk3288
 - [完整重建与内核更新](docs/REBUILD.md)
 - [内核配置与构建说明](kernel/KERNEL_BUILD.md)
 - [组件来源与许可](THIRD_PARTY.md)
+- [Ubuntu 对应源码归档](docs/CORRESPONDING-SOURCES.md)
 
 [MIT 许可证](LICENSE)仅适用于本项目独立编写的构建和组装脚本。Linux、U-Boot、设备树、上游派生配置、Ubuntu 软件包、固件、字体和图片保留各自许可；具体边界与对应源码获取方式见 [THIRD_PARTY.md](THIRD_PARTY.md)。

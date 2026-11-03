@@ -1,0 +1,63 @@
+{
+  "tool_checks": {
+    "passed": 7,
+    "failed": 0,
+    "tests": [
+      {
+        "test": "reject path traversal",
+        "passed": true
+      },
+      {
+        "test": "reject credentialed mirror URL",
+        "passed": true
+      },
+      {
+        "test": "reject duplicate checksum filenames",
+        "passed": true
+      },
+      {
+        "test": "real .dsc archive references match authenticated manifest",
+        "passed": true
+      },
+      {
+        "test": "reject altered .dsc referenced archive checksum",
+        "passed": true
+      },
+      {
+        "test": "gpgv rejects modified signed InRelease",
+        "passed": true,
+        "exit_code": 1
+      },
+      {
+        "test": "reject source payload checksum mismatch",
+        "passed": true
+      }
+    ]
+  },
+  "tar_checks": {
+    "source_package_coverage": 501,
+    "archives": [
+      {
+        "archive": "ubuntu22.04-jammy-corresponding-sources-01-of-03.tar",
+        "source_packages_verified": 96,
+        "dsc_content_sha256_verified": 96,
+        "all_referenced_members_present": true,
+        "private_host_proxy_strings_absent": true
+      },
+      {
+        "archive": "ubuntu22.04-jammy-corresponding-sources-02-of-03.tar",
+        "source_packages_verified": 324,
+        "dsc_content_sha256_verified": 324,
+        "all_referenced_members_present": true,
+        "private_host_proxy_strings_absent": true
+      },
+      {
+        "archive": "ubuntu22.04-jammy-corresponding-sources-03-of-03.tar",
+        "source_packages_verified": 81,
+        "dsc_content_sha256_verified": 81,
+        "all_referenced_members_present": true,
+        "private_host_proxy_strings_absent": true
+      }
+    ]
+  }
+}

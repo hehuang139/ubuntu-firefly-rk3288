@@ -27,7 +27,7 @@ Git 仓库保存配方、配置、许可证与版本记录；`./rebuild.sh fetch
 
 Ubuntu Base 以及后续安装的 GNOME、Mesa、systemd、应用程序和工具不是一个单一许可证的软件包集合。每个安装包的许可及上游来源可在镜像内 `/usr/share/doc/<包名>/copyright` 查阅。GNOME 各组件、Mesa、系统库等分别使用 GPL、LGPL、MIT/BSD 等许可证；固件包中不同文件另有各自许可。镜像中由 Ubuntu 包提供的壁纸、图标和字体也保留原许可。
 
-板级源码材料包含内核、U-Boot 及组装脚本的源码和配方，Ubuntu Base 归档属于二进制起点。已安装的 848 个二进制包对应 501 组源码包名与版本，见上述清单；这些用户空间源码按独立 Release 附件组织，也可从对应版本的 Ubuntu 源码仓库获取。继续分发镜像时，各组件的源码和许可提供要求随其许可证适用。
+板级源码材料包含内核、U-Boot 及组装脚本的源码和配方，Ubuntu Base 归档属于二进制起点。已安装的 848 个二进制包对应 501 组源码包名与版本。Release 的三份 `ubuntu22.04-jammy-corresponding-sources-*-of-03.tar` 包含全部 1,555 个原始源码文件，逐文件大小和 SHA-256 核对通过；下载、解包及认证记录见[对应源码说明](docs/CORRESPONDING-SOURCES.md)。继续分发镜像时，各组件的源码和许可提供要求随其许可证适用。
 
 记录二进制包对应的源码包与版本，可在运行的系统或构建 chroot 中执行：
 
