@@ -1,0 +1,14 @@
+[Unit]
+Description=Expand the Firefly SD root filesystem
+After=local-fs.target
+Before=display-manager.service
+ConditionPathExists=!/var/lib/firefly/root-expanded
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/firefly-resize
+TimeoutStartSec=300
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

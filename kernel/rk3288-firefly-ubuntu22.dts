@@ -1,0 +1,37 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+// Original Firefly-RK3288: Ubuntu 22.04 HDMI desktop booting from microSD.
+#include "rk3288-firefly.dts"
+
+/ {
+    chosen {
+        stdout-path = "serial2:115200n8";
+    };
+
+    hdmi-sound {
+        compatible = "simple-audio-card";
+        simple-audio-card,format = "i2s";
+        simple-audio-card,name = "HDMI";
+        simple-audio-card,mclk-fs = <512>;
+
+        simple-audio-card,cpu {
+            sound-dai = <&i2s>;
+        };
+        simple-audio-card,codec {
+            sound-dai = <&hdmi>;
+        };
+    };
+};
+
+// Keep the board's existing eMMC system inaccessible during SD bring-up.
+&emmc {
+    status = "disabled";
+};
+
+&i2s {
+    #sound-dai-cells = <0>;
+    status = "okay";
+};
+
+&sdmmc {
+    max-frequency = <50000000>;
+};

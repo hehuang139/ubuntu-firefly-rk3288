@@ -1,0 +1,19 @@
+{
+  "image_bytes": 8589934592,
+  "image_sha256": "918b1e8a98f7ae35d599941be0013b24d5019ae08aaf78946bdcfca91dee390d",
+  "root_uuid": "a7ed1fa5-7023-486c-95df-f5b42f060ca7",
+  "boot_label": "FIREFLYBOOT",
+  "root_label": "FIREFLY_ROOT",
+  "partitions": {
+    "boot_start": 32768,
+    "boot_sectors": 524288,
+    "root_start": 557056,
+    "root_sectors": 16220160
+  },
+  "boot_files": {
+    "boot/initrd.img": "e80c18d90c14d2d331f63ccbcb3d29101e692582d6d904271a2da5051ea3f583",
+    "boot/rk3288-firefly.dtb": "b7c6ac98a8ad0740fe4c18fd01995b0ff7add2ddfa0f18349eb004baa88ab2b3",
+    "boot/zImage": "337c291fb73179129808ef67fd7c176c590bd6af4b325c2036a5dff10130f1d8",
+    "extlinux/extlinux.conf": "f30709645b6cf18f652ad6f22e156c2a42b93e0c76e2cb50055f9886744d3fe7"
+  }
+}

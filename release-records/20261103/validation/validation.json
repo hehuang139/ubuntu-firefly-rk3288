@@ -1,0 +1,428 @@
+{
+  "image": "/build/artifacts/ubuntu-22.04.5-gnome-firefly-rk3288-sd-20261103-alpha.img",
+  "checks": {
+    "regular-image-file": {
+      "pass": true
+    },
+    "image-length": {
+      "pass": true,
+      "detail": 8589934592
+    },
+    "mbr-signature": {
+      "pass": true
+    },
+    "mbr-boot-partition": {
+      "pass": true
+    },
+    "mbr-root-partition": {
+      "pass": true
+    },
+    "no-extra-partitions": {
+      "pass": true
+    },
+    "partition-boundaries": {
+      "pass": true
+    },
+    "loader-boundary:idbloader.img": {
+      "pass": true
+    },
+    "loader-byte-match:idbloader.img": {
+      "pass": true,
+      "detail": {
+        "offset": 32768,
+        "bytes": 63488,
+        "sha256": "52cc45914527403534bd8b6f044acb29b9568c85ef22103c0bbf9afc89825335"
+      }
+    },
+    "loader-boundary:u-boot-dtb.img": {
+      "pass": true
+    },
+    "loader-byte-match:u-boot-dtb.img": {
+      "pass": true,
+      "detail": {
+        "offset": 8388608,
+        "bytes": 554688,
+        "sha256": "4f7d7171563590d7098a7c229157fadf840019003f45f29d10e41b1123ee97c4"
+      }
+    },
+    "uboot-uimage-magic": {
+      "pass": true
+    },
+    "uboot-header-payload-crc": {
+      "pass": true
+    },
+    "fat-boot-label": {
+      "pass": true
+    },
+    "whole-image-sha256": {
+      "pass": true,
+      "detail": "918b1e8a98f7ae35d599941be0013b24d5019ae08aaf78946bdcfca91dee390d"
+    },
+    "manifest-image-size": {
+      "pass": true
+    },
+    "manifest-boot-file-set": {
+      "pass": true
+    },
+    "fat-file:boot/initrd.img": {
+      "pass": true,
+      "detail": "e80c18d90c14d2d331f63ccbcb3d29101e692582d6d904271a2da5051ea3f583"
+    },
+    "fat-file:boot/rk3288-firefly.dtb": {
+      "pass": true,
+      "detail": "b7c6ac98a8ad0740fe4c18fd01995b0ff7add2ddfa0f18349eb004baa88ab2b3"
+    },
+    "fat-file:boot/zImage": {
+      "pass": true,
+      "detail": "337c291fb73179129808ef67fd7c176c590bd6af4b325c2036a5dff10130f1d8"
+    },
+    "fat-file:extlinux/extlinux.conf": {
+      "pass": true,
+      "detail": "f30709645b6cf18f652ad6f22e156c2a42b93e0c76e2cb50055f9886744d3fe7"
+    },
+    "arm-zimage-header": {
+      "pass": true
+    },
+    "dtb-header-length": {
+      "pass": true
+    },
+    "initramfs-gzip-format": {
+      "pass": true,
+      "detail": [
+        "gzip",
+        "cpio"
+      ]
+    },
+    "initramfs-core-members": {
+      "pass": true,
+      "detail": {
+        "member_count": 548
+      }
+    },
+    "extlinux:LINUX": {
+      "pass": true
+    },
+    "extlinux:INITRD": {
+      "pass": true
+    },
+    "extlinux:FDT": {
+      "pass": true
+    },
+    "extlinux-root-options": {
+      "pass": true
+    },
+    "kernel-modesetting-enabled": {
+      "pass": true
+    },
+    "root-partition-source-file": {
+      "pass": true
+    },
+    "root-partition-byte-hash-match": {
+      "pass": true,
+      "detail": "70d4a8b60631f6abe7a778c53b55d7a39f14c3f2fd14cc56528481a5c890eb94"
+    },
+    "ext4-superblock-magic": {
+      "pass": true
+    },
+    "ext4-label": {
+      "pass": true,
+      "detail": "FIREFLY_ROOT"
+    },
+    "ext4-uuid-matches-manifest": {
+      "pass": true,
+      "detail": "a7ed1fa5-7023-486c-95df-f5b42f060ca7"
+    },
+    "e2fsck-readonly": {
+      "pass": true,
+      "detail": {
+        "returncode": 0,
+        "output": "Pass 1: Checking inodes, blocks, and sizes\nPass 2: Checking directory structure\nPass 3: Checking directory connectivity\nPass 4: Checking reference counts\nPass 5: Checking group summary information\nFIREFLY_ROOT: 50151/506912 files (0.8% non-contiguous), 648920/2027520 blocks\ne2fsck 1.46.5 (30-Dec-2021)\n"
+      }
+    },
+    "dpkg-no-incomplete-packages": {
+      "pass": true,
+      "detail": {
+        "package_records": 848,
+        "incomplete": {}
+      }
+    },
+    "installed-package-architectures": {
+      "pass": true,
+      "detail": [
+        "all",
+        "armhf"
+      ]
+    },
+    "installed-package:gdm3": {
+      "pass": true,
+      "detail": {
+        "version": "42.0-1ubuntu7.22.04.4",
+        "architecture": "armhf",
+        "status": "install ok installed"
+      }
+    },
+    "installed-package:gnome-initial-setup": {
+      "pass": true,
+      "detail": {
+        "version": "42.0.1-1ubuntu2.3",
+        "architecture": "armhf",
+        "status": "install ok installed"
+      }
+    },
+    "installed-package:gnome-shell": {
+      "pass": true,
+      "detail": {
+        "version": "42.9-0ubuntu2.3",
+        "architecture": "armhf",
+        "status": "install ok installed"
+      }
+    },
+    "installed-package:gnome-session": {
+      "pass": true,
+      "detail": {
+        "version": "42.0-1ubuntu2",
+        "architecture": "all",
+        "status": "install ok installed"
+      }
+    },
+    "installed-package:libgl1-mesa-dri": {
+      "pass": true,
+      "detail": {
+        "version": "23.2.1-1ubuntu3.1~22.04.4",
+        "architecture": "armhf",
+        "status": "install ok installed"
+      }
+    },
+    "installed-package:cloud-guest-utils": {
+      "pass": true,
+      "detail": {
+        "version": "0.32-22-g45fe84a5-0ubuntu1",
+        "architecture": "all",
+        "status": "install ok installed"
+      }
+    },
+    "gnome-wayland-session-desktop": {
+      "pass": true
+    },
+    "gnome-xorg-session-desktop": {
+      "pass": true
+    },
+    "mesa-panfrost-dri-library": {
+      "pass": true
+    },
+    "no-precreated-ordinary-user": {
+      "pass": true
+    },
+    "setup-system-accounts": {
+      "pass": true
+    },
+    "root-password-locked": {
+      "pass": true
+    },
+    "machine-id-empty": {
+      "pass": true
+    },
+    "symlink:/var/lib/dbus/machine-id": {
+      "pass": true,
+      "detail": "/etc/machine-id"
+    },
+    "no-build-random-seed": {
+      "pass": true
+    },
+    "no-build-emulator": {
+      "pass": true
+    },
+    "gdm-initial-setup-wayland": {
+      "pass": true
+    },
+    "gdm-no-shared-autologin": {
+      "pass": true
+    },
+    "default-display-manager": {
+      "pass": true
+    },
+    "symlink:/etc/systemd/system/display-manager.service": {
+      "pass": true,
+      "detail": "/lib/systemd/system/gdm3.service"
+    },
+    "symlink:/etc/systemd/system/default.target": {
+      "pass": true,
+      "detail": "/lib/systemd/system/graphical.target"
+    },
+    "symlink:/etc/systemd/system/multi-user.target.wants/firefly-resize.service": {
+      "pass": true,
+      "detail": "/etc/systemd/system/firefly-resize.service"
+    },
+    "symlink:/etc/systemd/system/multi-user.target.wants/NetworkManager.service": {
+      "pass": true,
+      "detail": "/lib/systemd/system/NetworkManager.service"
+    },
+    "symlink:/etc/systemd/system/multi-user.target.wants/systemd-resolved.service": {
+      "pass": true,
+      "detail": "/lib/systemd/system/systemd-resolved.service"
+    },
+    "symlink:/etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service": {
+      "pass": true,
+      "detail": "/lib/systemd/system/systemd-timesyncd.service"
+    },
+    "symlink:/etc/systemd/system/getty.target.wants/serial-getty@ttyS2.service": {
+      "pass": true,
+      "detail": "/lib/systemd/system/serial-getty@.service"
+    },
+    "ssh-disabled:/etc/systemd/system/multi-user.target.wants/ssh.service": {
+      "pass": true
+    },
+    "ssh-disabled:/etc/systemd/system/sockets.target.wants/ssh.socket": {
+      "pass": true
+    },
+    "no-shared-ssh-host-keys": {
+      "pass": true
+    },
+    "ssh-first-start-key-order": {
+      "pass": true
+    },
+    "ssh-root-login-disabled": {
+      "pass": true
+    },
+    "owner-mode:/etc/gdm3/custom.conf": {
+      "pass": true,
+      "detail": {
+        "uid": 0,
+        "gid": 0,
+        "mode": "0o644"
+      }
+    },
+    "owner-mode:/etc/systemd/system/firefly-resize.service": {
+      "pass": true,
+      "detail": {
+        "uid": 0,
+        "gid": 0,
+        "mode": "0o644"
+      }
+    },
+    "owner-mode:/usr/local/sbin/firefly-resize": {
+      "pass": true,
+      "detail": {
+        "uid": 0,
+        "gid": 0,
+        "mode": "0o755"
+      }
+    },
+    "owner-mode:/etc/netplan/01-network-manager.yaml": {
+      "pass": true,
+      "detail": {
+        "uid": 0,
+        "gid": 0,
+        "mode": "0o600"
+      }
+    },
+    "owner-mode:/etc/NetworkManager/conf.d/10-firefly.conf": {
+      "pass": true,
+      "detail": {
+        "uid": 0,
+        "gid": 0,
+        "mode": "0o644"
+      }
+    },
+    "owner-mode:/etc/systemd/system/ssh.service.d/10-host-keys.conf": {
+      "pass": true,
+      "detail": {
+        "uid": 0,
+        "gid": 0,
+        "mode": "0o644"
+      }
+    },
+    "owner-mode:/etc/ssh/sshd_config.d/10-firefly.conf": {
+      "pass": true,
+      "detail": {
+        "uid": 0,
+        "gid": 0,
+        "mode": "0o644"
+      }
+    },
+    "fstab-root-label": {
+      "pass": true
+    },
+    "fstab-boot-label": {
+      "pass": true
+    },
+    "symlink:/etc/resolv.conf": {
+      "pass": true,
+      "detail": "/run/systemd/resolve/stub-resolv.conf"
+    },
+    "owner-mode:/etc/dconf/db/local": {
+      "pass": true,
+      "detail": {
+        "uid": 0,
+        "gid": 0,
+        "mode": "0o644"
+      }
+    },
+    "dconf-defaults-compiled": {
+      "pass": true
+    },
+    "depmod-generated": {
+      "pass": true,
+      "detail": {
+        "release": "6.6.161-firefly",
+        "module_count": 1015
+      }
+    },
+    "module-present:/panfrost.ko": {
+      "pass": true
+    },
+    "module-vermagic:/panfrost.ko": {
+      "pass": true,
+      "detail": "6.6.161-firefly SMP mod_unload modversions ARMv7 p2v8"
+    },
+    "module-present:/zram.ko": {
+      "pass": true
+    },
+    "module-vermagic:/zram.ko": {
+      "pass": true,
+      "detail": "6.6.161-firefly SMP mod_unload modversions ARMv7 p2v8"
+    },
+    "rootfs-kernel-matches-fat-input": {
+      "pass": true
+    },
+    "rootfs-initrd-matches-fat-input": {
+      "pass": true
+    },
+    "first-boot-resize-not-marked-complete": {
+      "pass": true
+    }
+  },
+  "result": "pass",
+  "critical_packages": {
+    "gdm3": {
+      "version": "42.0-1ubuntu7.22.04.4",
+      "architecture": "armhf",
+      "status": "install ok installed"
+    },
+    "gnome-initial-setup": {
+      "version": "42.0.1-1ubuntu2.3",
+      "architecture": "armhf",
+      "status": "install ok installed"
+    },
+    "gnome-shell": {
+      "version": "42.9-0ubuntu2.3",
+      "architecture": "armhf",
+      "status": "install ok installed"
+    },
+    "gnome-session": {
+      "version": "42.0-1ubuntu2",
+      "architecture": "all",
+      "status": "install ok installed"
+    },
+    "libgl1-mesa-dri": {
+      "version": "23.2.1-1ubuntu3.1~22.04.4",
+      "architecture": "armhf",
+      "status": "install ok installed"
+    },
+    "cloud-guest-utils": {
+      "version": "0.32-22-g45fe84a5-0ubuntu1",
+      "architecture": "all",
+      "status": "install ok installed"
+    }
+  }
+}

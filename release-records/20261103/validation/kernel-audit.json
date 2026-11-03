@@ -1,0 +1,32 @@
+{
+  "kernel_release": "6.6.161-firefly",
+  "source_url": "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.161.tar.xz",
+  "source_sha256": "7d34405be5cd4989b2a5e9cbefa798e3a175218901271e034af3fe4e840b71c6",
+  "requested_config_entries": 206,
+  "config_mismatches": {},
+  "module_count": 1015,
+  "expected_modules_found": [
+    "panfrost.ko",
+    "zram.ko",
+    "brcmfmac.ko",
+    "xpad.ko"
+  ],
+  "artifacts": {
+    "zImage": {
+      "bytes": 12038656,
+      "sha256": "337c291fb73179129808ef67fd7c176c590bd6af4b325c2036a5dff10130f1d8"
+    },
+    "rk3288-firefly-ubuntu22.dtb": {
+      "bytes": 42076,
+      "sha256": "b7c6ac98a8ad0740fe4c18fd01995b0ff7add2ddfa0f18349eb004baa88ab2b3"
+    },
+    "config-6.6.161-firefly": {
+      "bytes": 279999,
+      "sha256": "35180cac74967e763c268b5401e405b9c7e777a538e0f23fb0be4822498ea721"
+    },
+    "System.map-6.6.161-firefly": {
+      "bytes": 5686034,
+      "sha256": "9c37f4db24664c678fd9995d0d57a33e6204e9a445de99b72083a72e843218f2"
+    }
+  }
+}

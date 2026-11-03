@@ -1,0 +1,20 @@
+#!/bin/bash
+# SPDX-License-Identifier: MIT
+set -euo pipefail
+[[ -f /var/lib/firefly/root-expanded ]] && exit 0
+rootdev=$(findmnt -n -o SOURCE /)
+rootdev=$(readlink -f "$rootdev")
+case "$rootdev" in /dev/mmcblk*p[0-9]*) ;; *) echo 'Root is not an MMC partition; leaving layout unchanged.'; exit 1 ;; esac
+partname=${rootdev##*/}
+partnum=$(cat "/sys/class/block/$partname/partition")
+parent=$(lsblk -no PKNAME "$rootdev" | head -n 1)
+[[ -n "$parent" && "$partnum" == 2 ]]
+rc=0
+output=$(growpart "/dev/$parent" "$partnum" 2>&1) || rc=$?
+printf '%s\n' "$output"
+if [[ "$rc" != 0 ]]; then
+  [[ "$rc" == 1 && "$output" == NOCHANGE:* ]] || exit "$rc"
+fi
+resize2fs "$rootdev"
+install -d -m 0755 /var/lib/firefly
+touch /var/lib/firefly/root-expanded

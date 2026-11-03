@@ -1,0 +1,11 @@
+update-initramfs: Generating /boot/initrd.img-6.6.161-firefly
+Reading package lists...
+Building dependency tree...
+Reading state information...
+GNOME Shell 42.9
+armhf
+passwd: password expiry information changed.
+Created symlink /etc/systemd/system/multi-user.target.wants/firefly-resize.service → /etc/systemd/system/firefly-resize.service.
+Created symlink /etc/systemd/system/default.target → /lib/systemd/system/graphical.target.
+Created symlink /etc/systemd/system/getty.target.wants/serial-getty@ttyS2.service → /lib/systemd/system/serial-getty@.service.
+Ubuntu root filesystem finalized.

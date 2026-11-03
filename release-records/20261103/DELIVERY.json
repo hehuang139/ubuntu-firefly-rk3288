@@ -1,0 +1,27 @@
+{
+  "board": "Original Firefly-RK3288",
+  "distribution": "Ubuntu 22.04.5 LTS armhf",
+  "desktop": "GNOME Shell 42.9",
+  "kernel": "6.6.161-firefly",
+  "build_date": "2026-11-03",
+  "compressed_image": {
+    "filename": "ubuntu-22.04.5-gnome-firefly-rk3288-sd-20261103-alpha.img.gz",
+    "bytes": 1151731968,
+    "sha256": "96d90553dffce3c133fc42c02e06ef522f7eb2ed46a1ed8999b581635ae8d456",
+    "gzip_integrity": "pass"
+  },
+  "uncompressed_image": {
+    "bytes": 8589934592,
+    "sha256": "918b1e8a98f7ae35d599941be0013b24d5019ae08aaf78946bdcfca91dee390d"
+  },
+  "sources": {
+    "filename": "firefly-rk3288-ubuntu22.04-gnome-sources.tar.gz",
+    "bytes": 193489402,
+    "sha256": "d44921ea0eae144d56c9918d3cdfd15a1c26f2c96b1aec31a0c5d1a965e64b58"
+  },
+  "image_validation": {
+    "checks": 89,
+    "result": "pass"
+  },
+  "hardware_acceptance_next": "TF card + HDMI cold boot and GNOME first-user setup"
+}
