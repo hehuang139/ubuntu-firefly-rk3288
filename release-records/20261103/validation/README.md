@@ -12,3 +12,5 @@
 构建使用 x86_64 Linux、Ubuntu 22.04 Docker 工具容器、ARM 交叉编译及 QEMU 用户态 chroot。下一项硬件验收是原版 Firefly 的 TF 卡 + HDMI 冷启动，完成 GNOME 向导并检查桌面、USB 输入、网线、声音及 GPU renderer。
 
 交付镜像压缩为 1,151,731,968 字节，`gzip -t` 退出状态 0。未压缩镜像 SHA-256 与组装后独立验证记录一致；交付文件校验值见上级 `SHA256SUMS`。源码包的 gzip 完整性、43 项材料校验和重建入口检查通过。
+
+公开发布补充：镜像内848个二进制包的501个精确源码版本已从签名Jammy索引获取，1,555个文件的大小和SHA-256全部通过；501个.dsc的1,054条归档引用完整。三份独立tar打包时再次逐字节核验，报告与清单见发布记录目录。公开仓库的`rebuild.sh fetch`实际下载Ubuntu Base、Linux和U-Boot并完成哈希核对，`rebuild.sh check`通过；源码收集工具在公开仓库执行`--plan-only`，结果501/501版本、缺失0。Release附件校验值见`../RELEASE-SHA256SUMS`。
