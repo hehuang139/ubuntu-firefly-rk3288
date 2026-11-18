@@ -11,6 +11,11 @@ raw=$(realpath "$1")
 state=$(realpath -m "${2:-$work/vm}")
 display=${3:-8}
 ssh_port=${FIREFLY_QEMU_SSH_PORT:-}
+network=${FIREFLY_QEMU_NETWORK:-isolated}
+case "$network" in
+    isolated|nat) ;;
+    *) echo 'Set FIREFLY_QEMU_NETWORK to isolated or nat.' >&2; exit 2 ;;
+esac
 size=${FIREFLY_QEMU_SCREEN:-1024x768}
 case "$ssh_port" in
     '') ;;
@@ -53,13 +58,18 @@ docker run --rm --detach --name "$name" --network host --user "$(id -u):$(id -g)
         if [ ! -e ubuntu.qcow2 ]; then
             /qemu/qemu-build/qemu-img create -f qcow2 -F raw -b /release/source.img ubuntu.qcow2
         fi
-        display=$1; ssh_port=$2; size=$3
+        display=$1; ssh_port=$2; size=$3; network=$4
         cmdline="console=tty0 console=ttyS0,115200n8 earlycon=uart8250,mmio32,0xff690000 root=PARTUUID=eab61153-02 rootwait rw systemd.mask=firefly-resize.service"
         set --
-        if [ -n "$ssh_port" ]; then
-            cmdline="$cmdline systemd.wants=ssh.service"
-            set -- -netdev "user,id=ssh,restrict=on,ipv6=off,hostfwd=tcp:127.0.0.1:$ssh_port-:22" \
-                -device virtio-net-device,netdev=ssh
+        if [ "$network" = nat ] || [ -n "$ssh_port" ]; then
+            restrict=on
+            [ "$network" != nat ] || restrict=off
+            netdev="user,id=net,restrict=$restrict,ipv6=off"
+            if [ -n "$ssh_port" ]; then
+                cmdline="$cmdline systemd.wants=ssh.service"
+                netdev="$netdev,hostfwd=tcp:127.0.0.1:$ssh_port-:22"
+            fi
+            set -- -netdev "$netdev" -device virtio-net-device,netdev=net
         fi
         exec /qemu/qemu-build/qemu-system-arm \
             -name "Firefly-RK3288 Ubuntu 22.04 GNOME" \
@@ -74,7 +84,7 @@ docker run --rm --detach --name "$name" --network host --user "$(id -u):$(id -g)
             -device virtio-blk-device,drive=ubuntu -device "virtio-gpu-device,xres=${size%x*},yres=${size#*x}" \
             -device virtio-keyboard-device -device virtio-tablet-device \
             -object rng-random,id=rng,filename=/dev/urandom -device virtio-rng-device,rng=rng "$@" 2>/vm/qemu.log
-    ' firefly "$display" "$ssh_port" "$size"
+    ' firefly "$display" "$ssh_port" "$size" "$network"
 if [ "$(docker inspect --format '{{.State.Running}}' "$name" 2>/dev/null || true)" != true ]; then
     echo "QEMU failed to start; check $state/qemu.log" >&2
     exit 1

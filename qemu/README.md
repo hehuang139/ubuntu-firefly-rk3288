@@ -1,6 +1,6 @@
 # 在 QEMU 上运行 Firefly-RK3288 的 Ubuntu GNOME
 
-`firefly-rk3288` 是 QEMU 10.2.0 的独立实验板型。它使用 2 GiB 内存、4 个 Cortex-A15 模拟核（提供 RK3288 所用的 ARMv7-A 指令集）、24 MHz 通用定时器，以及按 RK3288 地址映射连接的 GICv2 和 UART2，并用虚拟 PL031 RTC 在开机时读取宿主机时间。虚拟磁盘、显示、键盘、鼠标和随机数设备走 VirtIO MMIO，显示通过本机 VNC 访问，默认不配置网卡；开启 SSH 时启用 VirtIO 网卡。
+`firefly-rk3288` 是 QEMU 10.2.0 的独立实验板型。它使用 2 GiB 内存、4 个 Cortex-A15 模拟核（提供 RK3288 所用的 ARMv7-A 指令集）、24 MHz 通用定时器，以及按 RK3288 地址映射连接的 GICv2 和 UART2，并用虚拟 PL031 RTC 在开机时读取宿主机时间。虚拟磁盘、显示、键盘、鼠标和随机数设备走 VirtIO MMIO，显示通过本机 VNC 访问，默认不配置网卡；开启 SSH 或 NAT 时启用 VirtIO 网卡。
 
 QEMU 直接加载专用 Linux `zImage` 和实验 DTB，从原版 8 GiB Ubuntu 22.04.5 armhf 镜像的第二个分区启动。模拟内核基于发行版的 `6.6.161-firefly` 配置，启用 VirtIO GPU、输入和随机数驱动，并保留发行版的 VirtIO 网卡驱动。原镜像以只读方式挂载，首次设置和日常改动保存在 qcow2 写时复制盘。启动参数只在模拟器中屏蔽实板专用的 TF 扩容服务。
 
@@ -50,10 +50,20 @@ FIREFLY_QEMU_SSH_PORT=2222 ./qemu/run.sh "artifacts/$name.img"
 ssh -p 2222 your_user@127.0.0.1
 ```
 
-将 `your_user` 换成首次设置中创建的用户名，连接时输入对应密码。脚本只在本机 `127.0.0.1` 监听并转发到来宾 TCP 22，来宾网卡通过 QEMU 的隔离网络领取地址。此模式不提供来宾上网，也不向局域网开放 SSH。通过启动参数启动镜像内已有的 SSH 服务；不改动发行镜像的默认设置。需要从宿主机进入串口登录提示时，可执行 `socat STDIO,raw,echo=0 UNIX-CONNECT:qemu/work/vm/console.sock`。
+将 `your_user` 换成首次设置中创建的用户名，连接时输入对应密码。脚本只在本机 `127.0.0.1` 监听并转发到来宾 TCP 22，默认使用 QEMU 的隔离网络，来宾只能通过显式转发与宿主机通信。SSH 不向局域网开放。通过启动参数启动镜像内已有的 SSH 服务；不改动发行镜像的默认设置。需要从宿主机进入串口登录提示时，可执行 `socat STDIO,raw,echo=0 UNIX-CONNECT:qemu/work/vm/console.sock`。
+
+## 让虚拟机联网
+
+在启动时加 `FIREFLY_QEMU_NETWORK=nat`，启用来宾 IPv4 出网和 DNS。可以和本机 SSH 转发一起用：
+
+```sh
+FIREFLY_QEMU_NETWORK=nat FIREFLY_QEMU_SSH_PORT=2222 ./qemu/run.sh "artifacts/$name.img"
+```
+
+从来宾运行 `getent ahostsv4 mirrors.ustc.edu.cn` 和 `sudo apt-get -o APT::Update::Error-Mode=any update` 检查 DNS 和软件源。SSH 仍只在宿主机 `127.0.0.1` 监听；NAT 不会自动把宿主机的代理配置带进来。需要代理时，`127.0.0.1` 指来宾自己；QEMU 的默认宿主机地址是 `10.0.2.2`。切换网络模式要关机再启动，沿用原状态目录即可保留系统数据。
 
 ## 验证记录
 
-在 x86_64 Linux 上从 `v0.1.0-alpha` 的原始镜像启动 Ubuntu 22.04.5 armhf。[启动日志](evidence/serial-excerpt.txt)记录了四核、VirtIO 磁盘、虚拟 RTC 和 GNOME 的加载。在 VNC 中完成[首次设置](evidence/gnome-first-setup.png)，创建测试账号，点[开始使用 Ubuntu](evidence/gnome-setup-complete.png)后进入[应用列表](evidence/gnome-apps.png)。重启时启用 800×600 和 SSH，随后通过 `ssh -p 2222` 使用首次设置创建的账号成功登录；`uname -m` 返回 `armv7l`，`systemctl is-active ssh` 返回 `active`。原始镜像继续以只读方式挂载。
+在 x86_64 Linux 上从 `v0.1.0-alpha` 的原始镜像启动 Ubuntu 22.04.5 armhf。[启动日志](evidence/serial-excerpt.txt)记录了四核、VirtIO 磁盘、虚拟 RTC 和 GNOME 的加载。在 VNC 中完成[首次设置](evidence/gnome-first-setup.png)，创建测试账号，点[开始使用 Ubuntu](evidence/gnome-setup-complete.png)后进入[应用列表](evidence/gnome-apps.png)。重启时启用 800×600 和 SSH，随后通过 `ssh -p 2222` 使用首次设置创建的账号成功登录；`uname -m` 返回 `armv7l`，`systemctl is-active ssh` 返回 `active`。启用 NAT 后，来宾通过 DHCP 获得默认路由，可以解析中科大镜像域名并直连软件源；关闭 APT 代理后用严格错误模式更新，四个 Jammy 软件源均可访问，命令退出码为 `0`。原始镜像继续以只读方式挂载。
 
 模型 C 源码和 DTS 使用 GPL-2.0-or-later，新增构建及启动脚本使用 MIT。上游 QEMU 和 Linux 源码由 `prepare.sh` 按固定版本获取；Ubuntu 用户空间与实板镜像的对应源码见[发布说明](../docs/CORRESPONDING-SOURCES.md)。
