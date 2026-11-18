@@ -8,6 +8,14 @@ fi
 src=$(realpath "$1")
 base_config=$(realpath "$2")
 out=$(realpath -m "$3")
+model=$(dirname "$(realpath "$0")")
+tlb_patch="$model/patches/arm-tcg-batch-tlb.patch"
+if patch --batch -d "$src" -p1 --forward --dry-run < "$tlb_patch" >/dev/null; then
+    patch --batch -d "$src" -p1 --forward < "$tlb_patch"
+elif ! patch --batch -d "$src" -p1 --reverse --dry-run < "$tlb_patch" >/dev/null; then
+    echo "Cannot apply the QEMU TLB patch; use the pinned Linux source." >&2
+    exit 1
+fi
 mkdir -p "$out"
 cp "$base_config" "$out/.config"
 "$src/scripts/config" --file "$out/.config" \

@@ -59,7 +59,7 @@ docker run --rm --detach --name "$name" --network host --user "$(id -u):$(id -g)
             /qemu/qemu-build/qemu-img create -f qcow2 -F raw -b /release/source.img ubuntu.qcow2
         fi
         display=$1; ssh_port=$2; size=$3; network=$4
-        cmdline="console=tty0 console=ttyS0,115200n8 earlycon=uart8250,mmio32,0xff690000 root=PARTUUID=eab61153-02 rootwait rw systemd.mask=firefly-resize.service"
+        cmdline="console=tty0 console=ttyS0,115200n8 earlycon=uart8250,mmio32,0xff690000 root=PARTUUID=eab61153-02 rootwait rw systemd.mask=firefly-resize.service systemd.mask=boot-firmware.mount systemd.mask=serial-getty@ttyS2.service"
         set --
         if [ "$network" = nat ] || [ -n "$ssh_port" ]; then
             restrict=on

@@ -1,0 +1,32 @@
+--- a/arch/arm/kernel/smp_tlb.c
++++ b/arch/arm/kernel/smp_tlb.c
+@@ -217,9 +217,17 @@
+ 	broadcast_tlb_a15_erratum();
+ }
+ 
++/* In this QEMU model each shareable TLBI synchronizes the emulated CPUs. */
++#define QEMU_TLB_RANGE_LIMIT (16 * PAGE_SIZE)
++
+ void flush_tlb_range(struct vm_area_struct *vma,
+                      unsigned long start, unsigned long end)
+ {
++	if (end - start >= QEMU_TLB_RANGE_LIMIT) {
++		flush_tlb_mm(vma->vm_mm);
++		return;
++	}
++
+ 	if (tlb_ops_need_broadcast()) {
+ 		struct tlb_args ta;
+ 		ta.ta_vma = vma;
+@@ -234,6 +242,11 @@
+ 
+ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+ {
++	if (end - start >= QEMU_TLB_RANGE_LIMIT) {
++		flush_tlb_all();
++		return;
++	}
++
+ 	if (tlb_ops_need_broadcast()) {
+ 		struct tlb_args ta;
+ 		ta.ta_start = start;

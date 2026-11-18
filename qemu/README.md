@@ -2,7 +2,7 @@
 
 `firefly-rk3288` 是 QEMU 10.2.0 的独立实验板型。它使用 2 GiB 内存、4 个 Cortex-A15 模拟核（提供 RK3288 所用的 ARMv7-A 指令集）、24 MHz 通用定时器，以及按 RK3288 地址映射连接的 GICv2 和 UART2，并用虚拟 PL031 RTC 在开机时读取宿主机时间。虚拟磁盘、显示、键盘、鼠标和随机数设备走 VirtIO MMIO，显示通过本机 VNC 访问，默认不配置网卡；开启 SSH 或 NAT 时启用 VirtIO 网卡。
 
-QEMU 直接加载专用 Linux `zImage` 和实验 DTB，从原版 8 GiB Ubuntu 22.04.5 armhf 镜像的第二个分区启动。模拟内核基于发行版的 `6.6.161-firefly` 配置，启用 VirtIO GPU、输入和随机数驱动，并保留发行版的 VirtIO 网卡驱动。原镜像以只读方式挂载，首次设置和日常改动保存在 qcow2 写时复制盘。启动参数只在模拟器中屏蔽实板专用的 TF 扩容服务。
+QEMU 直接加载专用 Linux `zImage` 和实验 DTB，从原版 8 GiB Ubuntu 22.04.5 armhf 镜像的第二个分区启动。模拟内核基于发行版的 `6.6.161-firefly` 配置，启用 VirtIO GPU、输入和随机数驱动，并保留发行版的 VirtIO 网卡驱动。原镜像以只读方式挂载，首次设置和日常改动保存在 qcow2 写时复制盘。模拟内核批量刷新较大的页表缓存范围，减少模拟 CPU 之间的同步。启动时跳过实板专用的 TF 扩容、`/boot/firmware` 挂载和 `ttyS2` 登录服务；模拟串口仍用 `ttyS0`。
 
 实验用于验证 Ubuntu 用户空间、GNOME 和虚拟键鼠。Firefly 的 BootROM、DDR 初始化、U-Boot、TF 控制器、HDMI 和 Mali GPU 不在本模型的范围；实验内核、DTB 和 qcow2 文件不能用于实板刷卡。
 
@@ -41,6 +41,8 @@ gsettings set org.gnome.desktop.interface enable-animations false
 
 也可以在「设置 → 显示器」切换分辨率。`FIREFLY_QEMU_CPU_LIMIT` 和 `FIREFLY_QEMU_RAM_LIMIT` 可以限制容器占用宿主机的资源（如 `20` 和 `47g`）；模拟板卡仍有 4 核和 2 GiB 内存。
 
+更新已有的模拟器时，重新执行 `./qemu/prepare.sh` 构建内核，正常关机后使用原来的状态目录启动。`ubuntu.qcow2` 仍保存原账号、应用和文件。
+
 ## 通过 SSH 登录
 
 先在首次设置中创建自己的账号。关机后，使用原来的状态目录重新启动，在启动命令中指定本机转发端口：
@@ -66,4 +68,6 @@ FIREFLY_QEMU_NETWORK=nat FIREFLY_QEMU_SSH_PORT=2222 ./qemu/run.sh "artifacts/$na
 
 在 x86_64 Linux 上从 `v0.1.0-alpha` 的原始镜像启动 Ubuntu 22.04.5 armhf。[启动日志](evidence/serial-excerpt.txt)记录了四核、VirtIO 磁盘、虚拟 RTC 和 GNOME 的加载。在 VNC 中完成[首次设置](evidence/gnome-first-setup.png)，创建测试账号，点[开始使用 Ubuntu](evidence/gnome-setup-complete.png)后进入[应用列表](evidence/gnome-apps.png)。重启时启用 800×600 和 SSH，随后通过 `ssh -p 2222` 使用首次设置创建的账号成功登录；`uname -m` 返回 `armv7l`，`systemctl is-active ssh` 返回 `active`。启用 NAT 后，来宾通过 DHCP 获得默认路由，可以解析中科大镜像域名并直连软件源；关闭 APT 代理后用严格错误模式更新，四个 Jammy 软件源均可访问，命令退出码为 `0`。原始镜像继续以只读方式挂载。
 
-模型 C 源码和 DTS 使用 GPL-2.0-or-later，新增构建及启动脚本使用 MIT。上游 QEMU 和 Linux 源码由 `prepare.sh` 按固定版本获取；Ubuntu 用户空间与实板镜像的对应源码见[发布说明](../docs/CORRESPONDING-SOURCES.md)。
+在同一台 x86_64 Xeon E5-2680 v2 主机上，对同一离线快照创建两个写时复制盘，均使用四核 TCG、2 GiB 内存、800×600 VNC 和 NAT，并屏蔽相同的板载服务。仅换用批量刷新 TLB 的内核后，`systemd-analyze time` 从 **153.771 s** 降至 **85.748 s**，`systemd-udev-trigger` 从 **47.844 s** 降至 **19.991 s**。新内核下登录 GNOME、通过 SSH 执行命令并解析软件源域名，`systemctl --failed` 返回 0 个失败单元。另从本机 VNC 发送 `Alt+F2` 并观察运行框出现在画面，首次响应从约 18 秒降到约 6 秒；新内核之后两次仍需约 2 秒。桌面由来宾软件渲染。
+
+模型 C 源码和 DTS 使用 GPL-2.0-or-later，内核补丁沿用上游文件的 GPL-2.0-only，新增构建及启动脚本使用 MIT。上游 QEMU 和 Linux 源码由 `prepare.sh` 按固定版本获取；Ubuntu 用户空间与实板镜像的对应源码见[发布说明](../docs/CORRESPONDING-SOURCES.md)。
