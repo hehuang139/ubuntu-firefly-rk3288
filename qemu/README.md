@@ -64,10 +64,35 @@ FIREFLY_QEMU_NETWORK=nat FIREFLY_QEMU_SSH_PORT=2222 ./qemu/run.sh "artifacts/$na
 
 从来宾运行 `getent ahostsv4 mirrors.ustc.edu.cn` 和 `sudo apt-get -o APT::Update::Error-Mode=any update` 检查 DNS 和软件源。SSH 仍只在宿主机 `127.0.0.1` 监听；NAT 不会自动把宿主机的代理配置带进来。需要代理时，`127.0.0.1` 指来宾自己；QEMU 的默认宿主机地址是 `10.0.2.2`。切换网络模式要关机再启动，沿用原状态目录即可保留系统数据。
 
+## 通过 VNC 使用轻量桌面
+
+普通 VNC 显示的是 GNOME 控制台。日常打开终端、文件管理器和设置，可以另开一个 Xfce 会话。它关闭窗口合成，使用来宾内的 TigerVNC，通过 SSH 转发到宿主机。它与 GNOME 共用同一账号和家目录，桌面设置在各自的会话中管理。运行前需要 NAT 和 SSH；例如宿主机 SSH 转发端口是 `2222`。
+
+先在来宾运行下面几条命令，最后一条会显示账号的 UID：
+
+```sh
+sudo apt-get -o APT::Update::Error-Mode=any update
+sudo apt-get install --no-install-recommends xfce4-session xfwm4 xfce4-panel \
+    xfdesktop4 xfce4-appfinder thunar xterm tigervnc-standalone-server
+id -u
+```
+
+然后在宿主机仓库根目录运行（把 `your_user` 和 `/run/user/1000` 中的 `1000` 换成上一步使用的用户名和 UID）：
+
+```sh
+ssh -T -o ExitOnForwardFailure=yes -p 2222 \
+    -L 127.0.0.1:5910:/run/user/1000/firefly-vnc/desktop.sock \
+    your_user@127.0.0.1 'sh -s' < ./qemu/xfce-vnc-session.sh
+```
+
+等终端打印 `VNC socket ready`，在 Remmina 中连接 `127.0.0.1:5910`。第一次加载面板和桌面图标需要额外时间。保持 SSH 命令运行；关闭 Remmina 可以再连，结束 SSH 命令会结束这次 Xfce 会话。来宾 VNC 只在该用户的私有 Unix 套接字监听，宿主端口只监听回环地址。需要 GNOME 时继续连接原来的 QEMU VNC 端口。
+
 ## 验证记录
 
 在 x86_64 Linux 上从 `v0.1.0-alpha` 的原始镜像启动 Ubuntu 22.04.5 armhf。[启动日志](evidence/serial-excerpt.txt)记录了四核、VirtIO 磁盘、虚拟 RTC 和 GNOME 的加载。在 VNC 中完成[首次设置](evidence/gnome-first-setup.png)，创建测试账号，点[开始使用 Ubuntu](evidence/gnome-setup-complete.png)后进入[应用列表](evidence/gnome-apps.png)。重启时启用 800×600 和 SSH，随后通过 `ssh -p 2222` 使用首次设置创建的账号成功登录；`uname -m` 返回 `armv7l`，`systemctl is-active ssh` 返回 `active`。启用 NAT 后，来宾通过 DHCP 获得默认路由，可以解析中科大镜像域名并直连软件源；关闭 APT 代理后用严格错误模式更新，四个 Jammy 软件源均可访问，命令退出码为 `0`。原始镜像继续以只读方式挂载。
 
 在同一台 x86_64 Xeon E5-2680 v2 主机上，对同一离线快照创建两个写时复制盘，均使用四核 TCG、2 GiB 内存、800×600 VNC 和 NAT，并屏蔽相同的板载服务。仅换用批量刷新 TLB 的内核后，`systemd-analyze time` 从 **153.771 s** 降至 **85.748 s**，`systemd-udev-trigger` 从 **47.844 s** 降至 **19.991 s**。新内核下登录 GNOME、通过 SSH 执行命令并解析软件源域名，`systemctl --failed` 返回 0 个失败单元。另从本机 VNC 发送 `Alt+F2` 并观察运行框出现在画面，首次响应从约 18 秒降到约 6 秒；新内核之后两次仍需约 2 秒。桌面由来宾软件渲染。
+
+同一宿主机上，使用更新后的模拟内核访问独立 Xfce 会话；本机 VNC 点击「应用程序」到收到变更画面的三次响应为 **4.45 s、3.66 s、0.80 s**。来宾通过 SSH 可登录，Xfce 中可打开应用菜单和终端。
 
 模型 C 源码和 DTS 使用 GPL-2.0-or-later，内核补丁沿用上游文件的 GPL-2.0-only，新增构建及启动脚本使用 MIT。上游 QEMU 和 Linux 源码由 `prepare.sh` 按固定版本获取；Ubuntu 用户空间与实板镜像的对应源码见[发布说明](../docs/CORRESPONDING-SOURCES.md)。
