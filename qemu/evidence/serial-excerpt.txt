@@ -1,0 +1,13 @@
+[    0.000000] Linux version 6.6.161-firefly (firefly@builder) (arm-linux-gnueabihf-gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #1 SMP 2026-10-30 00:00:00 UTC
+[    0.000000] OF: fdt: Machine model: Firefly-RK3288 QEMU test model
+[    0.216248] SMP: Total of 4 processors activated (192.00 BogoMIPS).
+[    1.072162] input: QEMU Virtio Tablet as /devices/platform/90000400.virtio_mmio/virtio2/input/input0
+[    1.078213] input: QEMU Virtio Keyboard as /devices/platform/90000600.virtio_mmio/virtio3/input/input1
+[    1.850099] [drm] Initialized virtio_gpu 0.1.0 0 for 90000800.virtio_mmio on minor 0
+[    2.171408]  vda: vda1 vda2
+[    2.367852] rtc-pl031 90001000.rtc: registered as rtc0
+[    2.375177] rtc-pl031 90001000.rtc: setting system clock to 2026-11-18T09:23:30 UTC (1794993810)
+[    2.919973] VFS: Mounted root (ext4 filesystem) on device 254:2.
+Welcome to Ubuntu 22.04.5 LTS!
+[  OK  ] Finished Linux zramswap setup.
+[  OK  ] Started GNOME Display Manager.

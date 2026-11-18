@@ -13,6 +13,7 @@ Git 仓库保存配方、配置、许可证与版本记录；`./rebuild.sh fetch
 - `overlay/usr/local/sbin/firefly-resize`。
 - `kernel/build-kernel.sh`、`kernel/audit-kernel.py`。
 - `bootloader/source/rebuild-u-boot.sh`。
+- `qemu/` 新增的构建和启动脚本、Dockerfile。
 
 该 MIT 条款不改变上游源码、由上游配置派生的配置文件、设备树、系统软件包、固件、字体及图片的许可。上游文件保留其版权声明和 SPDX 标记。
 
@@ -58,6 +59,10 @@ Linux 内核整体采用 GPL-2.0-only，并在具体文件中包含双重许可�
 - 构建产物：`bootloader/idbloader.img`、`bootloader/u-boot-dtb.img`；配套源码材料附有制作时使用的这两个文件。
 
 U-Boot 主体使用 GPLv2，部分文件允许后续版本或使用其他许可；以源码内 `Licenses/README`、许可文本与各文件声明为准。两个 loader 从上游原版 Firefly 配置构建，使用 RAM 环境、保留串口输出，并从 SD 目标读取启动配置。完整源码、配置及重建脚本一并提供。
+
+## QEMU 10.2.0 实验板型
+
+`qemu/firefly-rk3288.c` 和 `qemu/firefly-rk3288.dts` 使用 GPL-2.0-or-later。`qemu/prepare.sh` 获取并校验上游 QEMU 10.2.0 及 Linux 6.6.161 的源码归档，上游文件沿用原有许可证。实验模型复用发布镜像的 Ubuntu 用户空间，原版 TF 卡镜像及其对应源码见同一 Release。
 
 ## 名称与资料
 

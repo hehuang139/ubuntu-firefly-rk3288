@@ -1,0 +1,5 @@
+/work/
+/lab/
+/linux-build/
+*.qcow2
+*.sock

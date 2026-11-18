@@ -1,0 +1,64 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/dts-v1/;
+
+/* Experimental emulation DTB. Never install it on a real board. */
+/ {
+    compatible = "firefly,firefly-rk3288-qemu";
+    model = "Firefly-RK3288 QEMU test model";
+    #address-cells = <1>;
+    #size-cells = <1>;
+    interrupt-parent = <&gic>;
+
+    aliases { serial0 = &uart2; };
+    chosen { stdout-path = "serial0:115200n8"; };
+    memory@0 { device_type = "memory"; reg = <0 0x80000000>; };
+    psci { compatible = "arm,psci-0.2"; method = "hvc"; };
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        cpu@0 { device_type = "cpu"; compatible = "arm,cortex-a15"; reg = <0>; enable-method = "psci"; };
+        cpu@1 { device_type = "cpu"; compatible = "arm,cortex-a15"; reg = <1>; enable-method = "psci"; };
+        cpu@2 { device_type = "cpu"; compatible = "arm,cortex-a15"; reg = <2>; enable-method = "psci"; };
+        cpu@3 { device_type = "cpu"; compatible = "arm,cortex-a15"; reg = <3>; enable-method = "psci"; };
+    };
+    timer {
+        compatible = "arm,armv7-timer";
+        interrupts = <1 13 0xf04>, <1 14 0xf04>, <1 11 0xf04>, <1 10 0xf04>;
+        clock-frequency = <24000000>;
+        always-on;
+    };
+    apb_clk: apb-clock {
+        compatible = "fixed-clock";
+        #clock-cells = <0>;
+        clock-frequency = <24000000>;
+    };
+    rtc@90001000 {
+        compatible = "arm,pl031", "arm,primecell";
+        reg = <0x90001000 0x1000>;
+        interrupts = <0 150 4>;
+        clocks = <&apb_clk>;
+        clock-names = "apb_pclk";
+    };
+    gic: interrupt-controller@ffc01000 {
+        compatible = "arm,gic-400";
+        #interrupt-cells = <3>;
+        #address-cells = <0>;
+        interrupt-controller;
+        reg = <0xffc01000 0x1000>, <0xffc02000 0x2000>;
+    };
+    uart2: serial@ff690000 {
+        compatible = "ns16550a";
+        reg = <0xff690000 0x100>;
+        interrupts = <0 57 4>;
+        reg-shift = <2>;
+        reg-io-width = <4>;
+        clock-frequency = <24000000>;
+        current-speed = <115200>;
+    };
+    virtio_mmio@90000000 { compatible = "virtio,mmio"; reg = <0x90000000 0x200>; interrupts = <0 144 4>; };
+    virtio_mmio@90000200 { compatible = "virtio,mmio"; reg = <0x90000200 0x200>; interrupts = <0 145 4>; };
+    virtio_mmio@90000400 { compatible = "virtio,mmio"; reg = <0x90000400 0x200>; interrupts = <0 146 4>; };
+    virtio_mmio@90000600 { compatible = "virtio,mmio"; reg = <0x90000600 0x200>; interrupts = <0 147 4>; };
+    virtio_mmio@90000800 { compatible = "virtio,mmio"; reg = <0x90000800 0x200>; interrupts = <0 148 4>; };
+    virtio_mmio@90000a00 { compatible = "virtio,mmio"; reg = <0x90000a00 0x200>; interrupts = <0 149 4>; };
+};

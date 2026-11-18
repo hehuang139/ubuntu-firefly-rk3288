@@ -21,6 +21,10 @@
 
 镜像不预置普通账号或统一密码，root 账号锁定。SSH 默认关闭，需要时在桌面终端运行 `sudo systemctl enable --now ssh`。更多设置、更新方法及无画面排查见[刷卡与首次开机](docs/README-刷卡与首次开机.md)。
 
+## 在电脑上试用 GNOME
+
+[Firefly-RK3288 QEMU 模型](qemu/README.md)可以从同一发布镜像启动，通过本机 VNC 体验 GNOME 首次设置和桌面。实验使用独立内核、设备树和虚拟写入盘。
+
 ## 系统组成
 
 | 组件 | 本版配置 |
