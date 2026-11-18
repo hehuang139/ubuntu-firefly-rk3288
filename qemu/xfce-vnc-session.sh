@@ -35,6 +35,10 @@ export XDG_SESSION_TYPE=x11 XDG_CURRENT_DESKTOP=XFCE XDG_SESSION_DESKTOP=xfce
 # Avoid redrawing all windows for transparency/shadows on the emulated CPU.
 # Store this preference only in this separate desktop session's config.
 export XDG_CONFIG_HOME="$state/config"
+mkdir -p "$XDG_CONFIG_HOME/xfce4"
+if [ ! -e "$XDG_CONFIG_HOME/xfce4/helpers.rc" ]; then
+    printf '%s\n' 'TerminalEmulator=xterm' > "$XDG_CONFIG_HOME/xfce4/helpers.rc"
+fi
 dbus-run-session -- sh -ec '
     xfconf-query -c xfwm4 -p /general/use_compositing --create -t bool -s false
     exec xfce4-session
